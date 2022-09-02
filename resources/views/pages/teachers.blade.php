@@ -9,6 +9,7 @@
                 <th>S no</th>
                 <th>Teacher Name</th>
                 <th>Quaitification</th>
+                <th>Action</th>
             </tr>
             
                 @foreach ($teachers as $teacher)
@@ -16,6 +17,7 @@
                         <td>{{$loop->iteration}}</td>
                         <td>{{$teacher->name}}</td>
                         <td>{{$teacher->qualification}}</td>
+                        <td><a href="{{url('teacher-schedule?teacher_id='.$teacher->id.'')}}">view schedule</a></td>
                 </tr>      
                 @endforeach
             </tr>

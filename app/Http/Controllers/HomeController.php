@@ -8,6 +8,7 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\PeriodSlot;
 use Illuminate\Http\Request;
+use App\Http\Requests\updateScheduleRequest;
 
 class HomeController extends Controller
 {
@@ -31,11 +32,46 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function edit_schedule(updateScheduleRequest $request)
     {
-        //
+        $class=Grade::findorFail($request->class_id);
+        $period= PeriodSlot::findorFail($request->slot_id);
+        $allteachers=Teacher::all();
+        $allsubjects=Subject::all();
+        return view('pages.edit-schedule',compact('class','period','allteachers','allsubjects'));
+        
     }
 
+    function save_schedule(Request $request){
+        // return $request->all();
+        $teacherhaveother_schedule=Pivot::where('period_slot_id',$request->period_slot_id)->where('teacher_id',$request->teacher_id)->first();
+        $period_with_class=Pivot::where('subject_id',$request->subject_id)->where('grade_id',$request->grade_id)->first();
+      
+        if($teacherhaveother_schedule){
+            $teacherhaveother_schedule->delete();
+        }
+        if($period_with_class){
+            $period_with_class->delete();
+        }
+
+         Pivot::updateorCreate($request->only((new Pivot)->getFillable()));
+         return redirect('/');
+    }
+    function teacher_schedule(Request $request){
+            // return $request->all();
+           $teacher= Teacher::find($request->teacher_id);
+        $endtime= PeriodSlot::whereHas('schedule',function($q)use($request){
+                $q->whereHas('teacher',function($q)use($request){
+                        $q->where('id',$request->teacher_id);
+                });
+         })->orderBy('end_time','desc')->pluck('end_time')->first();
+         $timetable=  Pivot::where('teacher_id',$request->teacher_id)->with(['teacher','subject','class','slot'])->get();
+           return view('pages.teacher-schedule',compact('teacher','endtime','timetable'));
+    }
+    function delete_schedule(Request $reqeust){
+        Pivot::find($reqeust->slot_id)->delete();
+        return back();
+    }
     /**
      * Store a newly created resource in storage.
      *

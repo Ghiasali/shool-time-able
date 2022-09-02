@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Config;
 use App\Models\PeriodSlot;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreConfigsRequest;
 
 class ConfigController extends Controller
 {
@@ -37,9 +38,16 @@ class ConfigController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreConfigsRequest $request)
     {
-        //
+        $configs=Config::first();
+        if($configs){
+            $configs->update($request->only((new Config)->getFillable()));
+        }else{
+            Config::create($request->only((new Config)->getFillable()));
+        }
+
+       return redirect('/configs');
     }
 
     /**
@@ -85,5 +93,9 @@ class ConfigController extends Controller
     public function destroy($id)
     {
         //
+    }
+    function edit_configs(){
+        $configs=Config::first();
+        return view('pages.edit-configs',compact('configs'));
     }
 }

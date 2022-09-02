@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\ClassSeeder;
+use Database\Seeders\SubjectSeeder;
+use Database\Seeders\TeacherSeeder;
+use Database\Seeders\PeriodSlotSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(TeacherSeeder::class);
+        $this->call(ClassSeeder::class);
+        $this->call(SubjectSeeder::class);
+        $this->call(PeriodSlotSeeder::class);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }

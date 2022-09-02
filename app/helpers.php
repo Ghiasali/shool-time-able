@@ -9,3 +9,4 @@ use Illuminate\Support\Facades\DB;
         
         return Pivot::where('period_slot_id',$slot_id)->where('grade_id',$class_id)->with(['teacher','subject'])->first();
     }
+   

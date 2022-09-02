@@ -17,11 +17,17 @@
                     <td>{{$configs->break_start_time??null}}</td>
                     <td>{{$configs->break_end_time??null}}</td>
                     <td>{{$configs->school_end_time??null}}</td>
-                    <td><i class="fa fa-pencil text-info" aria-hidden="true"></i></td>
-                </tr>
+                    <td><a href="{{ route('edit-configs') }}"><i class="fa fa-pencil text-info" aria-hidden="true" ></i></td>
+                    </tr>
             </table>
     </div>
 </div>
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  
+  
 
 </div>
 @stop

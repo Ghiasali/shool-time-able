@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Pivot;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PeriodSlot extends Model
 {
     use HasFactory;
+    function schedule(){
+        return $this->hasMany(Pivot::class,'period_slot_id');
+    }
 }
